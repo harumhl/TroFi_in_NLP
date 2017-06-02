@@ -82,34 +82,38 @@ while True:
                 summed_val += p(w_x, s_x) * max_of_WSM
             SSM_N[s_x, s_y] = summed_val
 
-#7: for wx, wy ∈ W × W do 
+#7: for wx, wy ∈ W × W do
     for w_x in W:
         for w_y in W:
         
 #8: w-simi+1(wx, wy) := (i = 0 P sx3wx p(wx, sx)maxsy3wy s-simI i (sx, sy)
 #                        else P sx3wx p(wx, sx)maxsy3wy {s-simL i (sx, sy),s-simN i (sx, sy)}
-            for s_x in sentences_containing (w_x, ???):
-        
+            for s_x in sentences_containing (w_x, S+L+N):
+            
                 summed_val = 0
-                for s_y in sentences_containing (w_y, ???):
-                    max_of_SSM = 0
-                    if i == 0:
-                        if SSM [s_x, s_y] > max_of_SSM:
-                            max_of_SSM = SSM [s_x, s_y]
-                    else:
-                        if SSM_L [s_x, s_y] > max_of_SSM:
-                            max_of_SSM = SSM_L [s_x, s_y]
-                        if SSM_N [s_x, s_y] > max_of_SSM:
-                            max_of_SSM = SSM_N [s_x, s_y]
+                    for s_y in sentences_containing (w_y, S+L+N):
+                        max_of_SSM = 0
+                        if i == 0:
+                            if SSM [s_x, s_y] > max_of_SSM:
+                                max_of_SSM = SSM [s_x, s_y]
+                        else:
+                            if (s_x, s_y) in SSM_L:
+                                if SSM_L [s_x, s_y] > max_of_SSM:
+                                    max_of_SSM = SSM_L [s_x, s_y]
+                            if (s_x, s_y) in SSM_N:
+                                if SSM_N [s_x, s_y] > max_of_SSM:
+                                    max_of_SSM = SSM_N [s_x, s_y]
                 summed_val += p(w_x, s_x) * max_of_SSM
             WSM [w_x, w_y] = summed_val
-        
+
 #9: end for
 #10: if ∀wx, maxwy {w-simi+1(wx, wy) − w-simi(wx, wy)} ≤  then
 # when to end. I'll just set it based on i value
 
 #11: break # algorithm converges in 1steps.
     #break
+    if i > 5: # TEMPORARY
+        break
 
 #12: end if
 #13: i := i + 1

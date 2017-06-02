@@ -6,8 +6,8 @@ def p (word, sentence): # unigram probability
             count += 1
     return count / len(sentence.split())
 
-def sentence_containing (word, sentences): #sentences = S + L + N?
-    new_set = {}
+def sentences_containing (word, sentences): #sentences = S + L + N?
+    new_set = []
     for sentence in sentences:
         if word in sentence:
             new_set.append(sentence)
