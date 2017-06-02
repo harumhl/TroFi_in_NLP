@@ -10,10 +10,21 @@ SSM_L = {} # SSM for literal context
 SSM_N = {} # SSM for nonliteral context
 
 # these 4 sets should not be empty
-S = {} # the set of sentences containing the target word
-L = {} # the set of literal seed sentences
-N = {} # the set of nonliteral seed sentences
-W = {} # the set of words/features, w ∈ s means w is in sentence s, s 3 w means s contains w
+# S: the set of sentences containing the target word
+# target word (temporarily): "nice"
+# I manually got rid of punctuation since I haven't developed anything to take care of that
+S = ["we had a nice time", "he is a really nice guy", "They are always nice to stranger", "Nice people wouldn not do such things", "It is nice and warm in here", "that is nice of you to say"]
+# L: the set of literal seed sentences
+L = ["it is about time for us to leave", "that guy over there was very mean"]
+# N: the set of nonliteral seed sentences
+N = ["time is money", "it makes my heart feel warm"]
+# W: the set of words/features, w ∈ s means w is in sentence s, s 3 w means s contains w
+# getting all the (unique) words from S, L, and N
+W = []
+for sentence in S+L+N:
+    for word in sentence.split():
+        W.append(word)
+W = list(set(W)) # set() gets rid of duplicates
 # e: threshold that determines the stopping condition
 
 # Initialize (all words and sentences have similarity of 1 to itself)
