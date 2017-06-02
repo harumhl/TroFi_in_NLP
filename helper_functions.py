@@ -25,6 +25,9 @@ def print_WSM (WSM, max_words = 9999):
 
     # the length of the longest word in the list
     longest_length = max(len(word) for word in first_vals)
+    # the length of the longest word among the first 'max_words' number of words
+    if max_words != 9999:
+        longest_length = max(len(word) for word in first_vals[:max_words])
 
     i = 0
     # display column names
