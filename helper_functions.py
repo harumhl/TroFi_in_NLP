@@ -1,7 +1,7 @@
 # helper function
 def p (word, sentence): # unigram probability
     count = 0
-    for a_word in sentence:
+    for a_word in sentence.split():
         if word == a_word:
             count += 1
     return count / len(sentence.split())
