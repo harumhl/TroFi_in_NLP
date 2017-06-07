@@ -71,13 +71,13 @@ while True:
         for s_y in N:
         
             summed_val = 0
-                for w_x in s_x.split():
+            for w_x in s_x.split():
                 
-                    # max WSM [w_x, w_y]
-                    max_of_WSM = -1
-                    for w_y in s_y.split():
-                        if WSM [w_x, w_y] > max_of_WSM:
-                            max_of_WSM = WSM [w_x, w_y]
+                # max WSM [w_x, w_y]
+                max_of_WSM = -1
+                for w_y in s_y.split():
+                    if WSM [w_x, w_y] > max_of_WSM:
+                        max_of_WSM = WSM [w_x, w_y]
         
                 summed_val += p(w_x, s_x) * max_of_WSM
             SSM_N[s_x, s_y] = summed_val
@@ -88,21 +88,21 @@ while True:
         
 #8: w-simi+1(wx, wy) := (i = 0 P sx3wx p(wx, sx)maxsy3wy s-simI i (sx, sy)
 #                        else P sx3wx p(wx, sx)maxsy3wy {s-simL i (sx, sy),s-simN i (sx, sy)}
+            summed_val = 0
             for s_x in sentences_containing (w_x, S+L+N):
             
-                summed_val = 0
-                    for s_y in sentences_containing (w_y, S+L+N):
-                        max_of_SSM = 0
-                        if i == 0:
-                            if SSM [s_x, s_y] > max_of_SSM:
-                                max_of_SSM = SSM [s_x, s_y]
-                        else:
-                            if (s_x, s_y) in SSM_L:
-                                if SSM_L [s_x, s_y] > max_of_SSM:
-                                    max_of_SSM = SSM_L [s_x, s_y]
-                            if (s_x, s_y) in SSM_N:
-                                if SSM_N [s_x, s_y] > max_of_SSM:
-                                    max_of_SSM = SSM_N [s_x, s_y]
+                max_of_SSM = 0
+                for s_y in sentences_containing (w_y, S+L+N):
+                    if i == 0:
+                        if SSM [s_x, s_y] > max_of_SSM:
+                            max_of_SSM = SSM [s_x, s_y]
+                    else:
+                        if (s_x, s_y) in SSM_L:
+                            if SSM_L [s_x, s_y] > max_of_SSM:
+                                max_of_SSM = SSM_L [s_x, s_y]
+                        if (s_x, s_y) in SSM_N:
+                            if SSM_N [s_x, s_y] > max_of_SSM:
+                                max_of_SSM = SSM_N [s_x, s_y]
                 summed_val += p(w_x, s_x) * max_of_SSM
             WSM [w_x, w_y] = summed_val
 
