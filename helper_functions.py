@@ -1,4 +1,6 @@
 # helper function
+import csv
+
 def p (word, sentence): # unigram probability
     count = 0
     for a_word in sentence.split():
@@ -66,3 +68,43 @@ def print_WSM (WSM, max_words = 9999):
 
 def print_SSM ():
     print ""
+
+def print_to_csv (matrix, filename, noZero = False):
+    # usage of matrix: WSM [word1, word2] = number
+    # data format: WSM = [((w11, w12), n1), ((w21, w22), n2), ((w31, w32), n3), ...]
+    with open(filename, "wb") as f:
+        writer = csv.writer (f)
+        
+        # first value of a tuple = [w11, w21, w31, ...]
+        # second value of a tuple = [w12, w22, w32, ...]
+        #     changing it to a set gets rid of duplicates
+        first_vals = list(set([word_tuple[0] for word_tuple in matrix]))
+        second_vals = list(set([word_tuple[1] for word_tuple in matrix]))
+        first_vals.sort()
+        second_vals.sort()
+        
+        one_row = []
+        
+        # display column names
+        one_row.append("")
+        for second_val in second_vals:
+            one_row.append(second_val)
+        writer.writerow(one_row)
+        
+        # display row names & similarity values
+        for first_val in first_vals:
+            one_row = []
+            
+            # display row names
+            one_row.append(first_val)
+            
+            for second_val in second_vals:
+                print matrix[first_val,second_val] == 0
+                
+                if noZero == True and matrix[first_val,second_val] == 0:
+                    one_row.append("")
+                else:
+                    one_row.append(matrix[first_val,second_val])
+            
+    writer.writerow(one_row)
+
