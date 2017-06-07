@@ -99,8 +99,6 @@ def print_to_csv (matrix, filename, noZero = False):
             one_row.append(first_val)
             
             for second_val in second_vals:
-                print matrix[first_val,second_val] == 0
-                
                 if noZero == True and matrix[first_val,second_val] == 0:
                     one_row.append("")
                 else:
