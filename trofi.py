@@ -94,8 +94,9 @@ while True:
                 max_of_SSM = 0
                 for s_y in sentences_containing (w_y, S+L+N):
                     if i == 0:
-                        if SSM [s_x, s_y] > max_of_SSM:
-                            max_of_SSM = SSM [s_x, s_y]
+                        if (s_x, s_y) in SSM:
+                            if SSM [s_x, s_y] > max_of_SSM:
+                                max_of_SSM = SSM [s_x, s_y]
                     else:
                         if (s_x, s_y) in SSM_L:
                             if SSM_L [s_x, s_y] > max_of_SSM:
