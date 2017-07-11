@@ -1,7 +1,8 @@
+#!/usr/bin/python
 # This uses a pseudo code from http://www.aclweb.org/anthology/E06-1042#page=3
 # I am using jupyter notebook to test my code, then copy it here
 # Parts of the program is only pseudo code. I just wanted to save it here
-import helper_functions
+from helper_functions import *
 
 # Create variables
 WSM = {} # Word Similarity Matrix. 
@@ -26,6 +27,20 @@ for sentence in S+L+N:
         W.append(word)
 W = list(set(W)) # set() gets rid of duplicates
 # e: threshold that determines the stopping condition
+
+with open("input_files/S.txt") as file_S:
+    S = file_S.readlines()
+with open("input_files/L.txt") as file_L:
+    L = file_L.readlines()
+with open("input_files/N.txt") as file_N:
+    N = file_N.readlines()
+
+S = [term.strip() for term in S] #get rid of \n char
+L = [term.strip() for term in L] #get rid of \n char
+N = [term.strip() for term in N] #get rid of \n char
+
+for sentence in N:
+    print(sentence)
 
 # Initialize (all words and sentences have similarity of 1 to itself)
 # 1: w-sim0(wx, wy) := 1 if wx = wy, 0 otherwise
