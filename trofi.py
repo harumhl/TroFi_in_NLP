@@ -28,6 +28,7 @@ for sentence in S+L+N:
 W = list(set(W)) # set() gets rid of duplicates
 # e: threshold that determines the stopping condition
 
+# open and read from input_files
 with open("input_files/S.txt") as file_S:
     S = file_S.readlines()
 with open("input_files/L.txt") as file_L:
@@ -36,11 +37,9 @@ with open("input_files/N.txt") as file_N:
     N = file_N.readlines()
 
 S = [term.strip() for term in S] #get rid of \n char
-L = [term.strip() for term in L] #get rid of \n char
-N = [term.strip() for term in N] #get rid of \n char
+L = [term.strip() for term in L]
+N = [term.strip() for term in N]
 
-for sentence in N:
-    print(sentence)
 
 # Initialize (all words and sentences have similarity of 1 to itself)
 # 1: w-sim0(wx, wy) := 1 if wx = wy, 0 otherwise
