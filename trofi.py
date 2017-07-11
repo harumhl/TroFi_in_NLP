@@ -18,7 +18,7 @@ S = ["we had a nice time", "he is a really nice guy", "They are always nice to s
 L = ["it is about time for us to leave", "that guy over there was very mean"]
 # N: the set of nonliteral seed sentences
 N = ["time is money", "it makes my heart feel warm"]
-# W: the set of words/features, w ∈ s means w is in sentence s, s 3 w means s contains w
+# W: the set of words/features, w "in" s means w is in sentence s, s "has" w means s contains w
 # getting all the (unique) words from S, L, and N
 W = []
 for sentence in S+L+N:
@@ -35,8 +35,8 @@ for word1 in W:
             WSM[word1, word2] = 1
         else:
             WSM[word1, word2] = 0
-    
-# 2: s-simI 0(sx, sy) := 1, for all sx, sy ∈ S × S where sx = sy, 0 otherwise
+
+# 2: s-simI 0(sx, sy) := 1, for all sx, sy "in" S x S where sx = sy, 0 otherwise
 for sentence1 in S:
     for sentence2 in S:
         if sentence1 == sentence2:
@@ -50,7 +50,7 @@ i = 0
 # 4: while (true) do
 while True:
     
-#5: s-simL i+1(sx, sy) := P wx∈sx p(wx, sx)maxwy∈sy w-simi(wx, wy), for all sx, sy ∈ S × L
+#5: s-simL i+1(sx, sy) := P wx"in"sx p(wx, sx)max wy"in"sy w-simi(wx, wy), for all sx, sy "in" S x L
     for s_x in S:
         for s_y in L:
             
@@ -66,7 +66,7 @@ while True:
             summed_val += p(w_x, s_x) * max_of_WSM
         SSM_L[s_x, s_y] = summed_val
 
-# 6: s-simN i+1(sx, sy) := P wx∈sx p(wx, sx)maxwy∈sy w-simi(wx, wy), for all sx, sy ∈ S × N
+# 6: s-simN i+1(sx, sy) := P wx"in"sx p(wx, sx)max wy"in"sy w-simi(wx, wy), for all sx, sy "in S x N
     for s_x in S:
         for s_y in N:
         
@@ -82,7 +82,7 @@ while True:
                 summed_val += p(w_x, s_x) * max_of_WSM
             SSM_N[s_x, s_y] = summed_val
 
-#7: for wx, wy ∈ W × W do
+#7: for wx, wy "in" W x W do
     for w_x in W:
         for w_y in W:
         
@@ -108,12 +108,12 @@ while True:
             WSM [w_x, w_y] = summed_val
 
 #9: end for
-#10: if ∀wx, maxwy {w-simi+1(wx, wy) − w-simi(wx, wy)} ≤  then
+#10: if "for all" wx, max wy {w-simi+1(wx, wy) - w-simi(wx, wy)} <=  then
 # when to end. I'll just set it based on i value
 
 #11: break # algorithm converges in 1steps.
     #break
-    if i > 5: # TEMPORARY
+    if i > 10: # TEMPORARY
         break
 
 #12: end if
@@ -123,24 +123,28 @@ while True:
 
 # so far above was KE-train
 # below is KE-test
-#1: For any sentence sx ∈ S
+#1: For any sentence sx "in" S
 for s_x in S:
     
 #2: if max sy s-simL(sx, sy) > max sy s-simN (sx, sy) then
     max_SSM_N = 0
     max_SSM_L = 0
-    for s_y in ???:
-        if SSM [s_x, s_y] > max_SSM_L:
-            max_SSM_L = SSM [s_x, s_y]
-    for s_y in ???:
-        if SSM [s_x, s_y] > max_SSM_N:
-            max_SSM_N = SSM [s_x, s_y]
+    for s_y in S+L+N:
+        if (s_x, s_y) in SSM_L:
+            if SSM_L [s_x, s_y] > max_SSM_L:
+                max_SSM_L = SSM_L [s_x, s_y]
+    for s_y in S+L+N:
+        if (s_x, s_y) in SSM_N:
+            if SSM_N [s_x, s_y] > max_SSM_N:
+                max_SSM_N = SSM_N [s_x, s_y]
             
     if max_SSM_L > max_SSM_N:
 #3: tag sx as literal
         print s_x, "literal"
 #4: else
-    else:
+    elif max_SSM_L < max_SSM_N:
 #5: tag sx as nonliteral
         print s_x, "nonliteral"
+    else:
+        print s_x, "hmm..."
 #6: end if
