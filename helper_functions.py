@@ -1,5 +1,25 @@
 # helper function
 import csv
+from nltk.stem.wordnet import WordNetLemmatizer
+
+def read_from_file (filename):
+
+    with open(filename) as open_file:
+        list_of_sentences = open_file.readlines()
+
+    # get rid of \n char
+    return [term.strip() for term in list_of_sentences]
+
+def lemmatize (list_of_sentences):
+    lemmatizer = WordNetLemmatizer()
+    for a_sentence in list_of_sentences:
+        new_sentence = ""
+        for a_word in a_sentence.split():
+            new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
+        # put the lemmatized sentence to the front
+        list_of_sentences = [new_sentence] + list_of_sentences
+        list_of_sentences.remove(a_sentence)
+    return list_of_sentences
 
 def p (word, sentence): # unigram probability
     count = 0

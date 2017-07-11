@@ -3,7 +3,6 @@
 # I am using jupyter notebook to test my code, then copy it here
 # Parts of the program is only pseudo code. I just wanted to save it here
 from helper_functions import *
-from nltk.stem.wordnet import WordNetLemmatizer
 
 # Create variables
 WSM = {} # Word Similarity Matrix. 
@@ -23,37 +22,14 @@ SSM_N = {} # SSM for nonliteral context
 
 
 # open and read from input_files
-with open("input_files/S.txt") as file_S:
-    S = file_S.readlines()
-with open("input_files/L.txt") as file_L:
-    L = file_L.readlines()
-with open("input_files/N.txt") as file_N:
-    N = file_N.readlines()
-###get rid of \n char
-S = [term.strip() for term in S]
-L = [term.strip() for term in L]
-N = [term.strip() for term in N]
+S = read_from_file ("input_files/S.txt")
+L = read_from_file ("input_files/L.txt")
+N = read_from_file ("input_files/N.txt")
 
 # Lemmatize (change verbs to their infinite forms)
-lemmatizer = WordNetLemmatizer()
-for a_sentence in S:
-    new_sentence = ""
-    for a_word in a_sentence.split():
-        new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
-    S = [new_sentence] + S
-    S.remove(a_sentence)
-for a_sentence in L:
-    new_sentence = ""
-    for a_word in a_sentence.split():
-        new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
-    L = [new_sentence] + L
-    L.remove(a_sentence)
-for a_sentence in N:
-    new_sentence = ""
-    for a_word in a_sentence.split():
-        new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
-    N = [new_sentence] + N
-    N.remove(a_sentence)
+S = lemmatize (S)
+L = lemmatize (L)
+N = lemmatize (N)
 
 # W: the set of words/features, w "in" s means w is in sentence s, s "has" w means s contains w
 # getting all the (unique) words from S, L, and N
