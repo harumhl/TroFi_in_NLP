@@ -3,6 +3,7 @@
 # I am using jupyter notebook to test my code, then copy it here
 # Parts of the program is only pseudo code. I just wanted to save it here
 from helper_functions import *
+from nltk.stem.wordnet import WordNetLemmatizer
 
 # Create variables
 WSM = {} # Word Similarity Matrix. 
@@ -14,19 +15,12 @@ SSM_N = {} # SSM for nonliteral context
 # S: the set of sentences containing the target word
 # target word (temporarily): "nice"
 # I manually got rid of punctuation since I haven't developed anything to take care of that
-S = ["we had a nice time", "he is a really nice guy", "They are always nice to stranger", "Nice people wouldn not do such things", "It is nice and warm in here", "that is nice of you to say"]
+#####S = ["we had a nice time", "he is a really nice guy", "They are always nice to stranger", "Nice people wouldn not do such things", "It is nice and warm in here", "that is nice of you to say"]
 # L: the set of literal seed sentences
-L = ["it is about time for us to leave", "that guy over there was very mean"]
+#####L = ["it is about time for us to leave", "that guy over there was very mean"]
 # N: the set of nonliteral seed sentences
-N = ["time is money", "it makes my heart feel warm"]
-# W: the set of words/features, w "in" s means w is in sentence s, s "has" w means s contains w
-# getting all the (unique) words from S, L, and N
-W = []
-for sentence in S+L+N:
-    for word in sentence.split():
-        W.append(word)
-W = list(set(W)) # set() gets rid of duplicates
-# e: threshold that determines the stopping condition
+#####N = ["time is money", "it makes my heart feel warm"]
+
 
 # open and read from input_files
 with open("input_files/S.txt") as file_S:
@@ -35,10 +29,40 @@ with open("input_files/L.txt") as file_L:
     L = file_L.readlines()
 with open("input_files/N.txt") as file_N:
     N = file_N.readlines()
-
-S = [term.strip() for term in S] #get rid of \n char
+###get rid of \n char
+S = [term.strip() for term in S]
 L = [term.strip() for term in L]
 N = [term.strip() for term in N]
+
+# Lemmatize (change verbs to their infinite forms)
+lemmatizer = WordNetLemmatizer()
+for a_sentence in S:
+    new_sentence = ""
+    for a_word in a_sentence.split():
+        new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
+    S = [new_sentence] + S
+    S.remove(a_sentence)
+for a_sentence in L:
+    new_sentence = ""
+    for a_word in a_sentence.split():
+        new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
+    L = [new_sentence] + L
+    L.remove(a_sentence)
+for a_sentence in N:
+    new_sentence = ""
+    for a_word in a_sentence.split():
+        new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
+    N = [new_sentence] + N
+    N.remove(a_sentence)
+
+# W: the set of words/features, w "in" s means w is in sentence s, s "has" w means s contains w
+# getting all the (unique) words from S, L, and N
+W = []
+for sentence in S+L+N:
+    for word in sentence.split():
+        W.append(word)
+W = list(set(W)) # set() gets rid of duplicates
+# e: threshold that determines the stopping condition
 
 
 # Initialize (all words and sentences have similarity of 1 to itself)
