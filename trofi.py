@@ -155,13 +155,13 @@ for s_x in S:
     max_SSM_N = 0
     max_SSM_L = 0
     for s_y in S+L+N:
-        if (s_x, s_y) in SSM_L:
-            if SSM_L [s_x, s_y] > max_SSM_L:
-                max_SSM_L = SSM_L [s_x, s_y]
+        if (s_x, s_y) in SSM_L_old:
+            if SSM_L_old [s_x, s_y] > max_SSM_L:
+                max_SSM_L = SSM_L_old [s_x, s_y]
     for s_y in S+L+N:
-        if (s_x, s_y) in SSM_N:
-            if SSM_N [s_x, s_y] > max_SSM_N:
-                max_SSM_N = SSM_N [s_x, s_y]
+        if (s_x, s_y) in SSM_N_old:
+            if SSM_N_old [s_x, s_y] > max_SSM_N:
+                max_SSM_N = SSM_N_old [s_x, s_y]
 
     if max_SSM_L > max_SSM_N:
 #3: tag sx as literal
