@@ -7,8 +7,10 @@ from helper_functions import *
 # Create variables
 WSM = {} # Word Similarity Matrix. 
 SSM = {} # Sentence Similarity Matrix. 
-SSM_L = {} # SSM for literal context
-SSM_N = {} # SSM for nonliteral context
+SSM_L_old = {} # SSM for literal context
+SSM_N_old = {} # SSM for nonliteral context
+SSM_L_new = {}
+SSM_N_new = {}
 
 # these 4 sets should not be empty
 # S: the set of sentences containing the target word
@@ -46,9 +48,9 @@ W = list(set(W)) # set() gets rid of duplicates
 for word1 in W:
     for word2 in W:
         if word1 == word2:
-            WSM[word1, word2] = 1
+            WSM [word1, word2] = 1
         else:
-            WSM[word1, word2] = 0
+            WSM [word1, word2] = 0
 
 # 2: s-simI 0(sx, sy) := 1, for all sx, sy "in" S x S where sx = sy, 0 otherwise
 for sentence1 in S:
@@ -78,7 +80,8 @@ while True:
                         max_of_WSM = WSM [w_x, w_y]
         
                 summed_val += p(w_x, s_x) * max_of_WSM
-            SSM_L[s_x, s_y] = summed_val
+            SSM_L_new [s_x, s_y] = summed_val
+    print SSM_L_new, "\n"
 
 # 6: s-simN i+1(sx, sy) := P wx"in"sx p(wx, sx)max wy"in"sy w-simi(wx, wy), for all sx, sy "in S x N
     for s_x in S:
@@ -94,7 +97,8 @@ while True:
                         max_of_WSM = WSM [w_x, w_y]
         
                 summed_val += p(w_x, s_x) * max_of_WSM
-            SSM_N[s_x, s_y] = summed_val
+            SSM_N_new [s_x, s_y] = summed_val
+    print SSM_N_new, "\n"
 
 #7: for wx, wy "in" W x W do
     for w_x in W:
@@ -112,15 +116,21 @@ while True:
                             if SSM [s_x, s_y] > max_of_SSM:
                                 max_of_SSM = SSM [s_x, s_y]
                     else:
-                        if (s_x, s_y) in SSM_L:
-                            if SSM_L [s_x, s_y] > max_of_SSM:
-                                max_of_SSM = SSM_L [s_x, s_y]
-                        if (s_x, s_y) in SSM_N:
-                            if SSM_N [s_x, s_y] > max_of_SSM:
-                                max_of_SSM = SSM_N [s_x, s_y]
+                        # using SSM (_L, _N) from previous iteration, not the one above
+                        if (s_x, s_y) in SSM_L_old:
+                            if SSM_L_old [s_x, s_y] > max_of_SSM:
+                                max_of_SSM = SSM_L_old [s_x, s_y]
+                        if (s_x, s_y) in SSM_N_old:
+                            if SSM_N_old [s_x, s_y] > max_of_SSM:
+                                max_of_SSM = SSM_N_old [s_x, s_y]
 
                 summed_val += p(w_x, s_x) * max_of_SSM
             WSM [w_x, w_y] = summed_val
+
+    SSM_L_old = SSM_L_new
+    SSM_N_old = SSM_N_new
+
+    print {key:value for key, value in WSM.items() if value != 0}, "\n\n"
 
 #9: end for
 #10: if "for all" wx, max wy {w-simi+1(wx, wy) - w-simi(wx, wy)} <=  then
@@ -128,7 +138,7 @@ while True:
 
 #11: break # algorithm converges in 1steps.
     #break
-    if i > 1: # TEMPORARY
+    if i > 0: # TEMPORARY
         break
 
 #12: end if
@@ -152,7 +162,7 @@ for s_x in S:
         if (s_x, s_y) in SSM_N:
             if SSM_N [s_x, s_y] > max_SSM_N:
                 max_SSM_N = SSM_N [s_x, s_y]
-            
+
     if max_SSM_L > max_SSM_N:
 #3: tag sx as literal
         print s_x, "literal", max_SSM_L, max_SSM_N

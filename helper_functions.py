@@ -19,9 +19,10 @@ def stemANDlemmatize (list_of_sentences, perform_stem = False):
     
     for a_sentence in list_of_sentences:
         tokenized = word_tokenize(a_sentence)
+        tokenized = [word.lower() for word in tokenized]
+        tokenized = [lemmatizer.lemmatize(word, 'v') for word in tokenized]
         if perform_stem == True:
             tokenized = [stemmer.stem(word) for word in tokenized]
-        tokenized = [lemmatizer.lemmatize(word, 'v') for word in tokenized]
         new_sentence = " ".join(tokenized)
         
         # put the lemmatized sentence to the front
