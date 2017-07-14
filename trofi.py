@@ -27,9 +27,9 @@ L = read_from_file ("input_files/L.txt")
 N = read_from_file ("input_files/N.txt")
 
 # Lemmatize (change verbs to their infinite forms)
-S = lemmatize (S)
-L = lemmatize (L)
-N = lemmatize (N)
+S = stemANDlemmatize (S, perform_stem = True)
+L = stemANDlemmatize (L, perform_stem = True)
+N = stemANDlemmatize (N, perform_stem = True)
 
 # W: the set of words/features, w "in" s means w is in sentence s, s "has" w means s contains w
 # getting all the (unique) words from S, L, and N
@@ -77,8 +77,8 @@ while True:
                     if WSM [w_x, w_y] > max_of_WSM:
                         max_of_WSM = WSM [w_x, w_y]
         
-            summed_val += p(w_x, s_x) * max_of_WSM
-        SSM_L[s_x, s_y] = summed_val
+                summed_val += p(w_x, s_x) * max_of_WSM
+            SSM_L[s_x, s_y] = summed_val
 
 # 6: s-simN i+1(sx, sy) := P wx"in"sx p(wx, sx)max wy"in"sy w-simi(wx, wy), for all sx, sy "in S x N
     for s_x in S:
@@ -118,6 +118,7 @@ while True:
                         if (s_x, s_y) in SSM_N:
                             if SSM_N [s_x, s_y] > max_of_SSM:
                                 max_of_SSM = SSM_N [s_x, s_y]
+
                 summed_val += p(w_x, s_x) * max_of_SSM
             WSM [w_x, w_y] = summed_val
 
@@ -127,7 +128,7 @@ while True:
 
 #11: break # algorithm converges in 1steps.
     #break
-    if i > 10: # TEMPORARY
+    if i > 1: # TEMPORARY
         break
 
 #12: end if
@@ -154,11 +155,11 @@ for s_x in S:
             
     if max_SSM_L > max_SSM_N:
 #3: tag sx as literal
-        print s_x, "literal"
+        print s_x, "literal", max_SSM_L, max_SSM_N
 #4: else
     elif max_SSM_L < max_SSM_N:
 #5: tag sx as nonliteral
-        print s_x, "nonliteral"
+        print s_x, "nonliteral", max_SSM_N, max_SSM_L
     else:
-        print s_x, "hmm..."
+        print s_x, "hmm...", max_SSM_L, max_SSM_N
 #6: end if

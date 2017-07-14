@@ -1,5 +1,7 @@
 # helper function
 import csv
+from nltk.tokenize import word_tokenize
+from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 
 def read_from_file (filename):
@@ -10,12 +12,18 @@ def read_from_file (filename):
     # get rid of \n char
     return [term.strip() for term in list_of_sentences]
 
-def lemmatize (list_of_sentences):
+def stemANDlemmatize (list_of_sentences, perform_stem = False):
+    
+    stemmer = PorterStemmer()
     lemmatizer = WordNetLemmatizer()
+    
     for a_sentence in list_of_sentences:
-        new_sentence = ""
-        for a_word in a_sentence.split():
-            new_sentence += lemmatizer.lemmatize(a_word, 'v') + " "
+        tokenized = word_tokenize(a_sentence)
+        if perform_stem == True:
+            tokenized = [stemmer.stem(word) for word in tokenized]
+        tokenized = [lemmatizer.lemmatize(word, 'v') for word in tokenized]
+        new_sentence = " ".join(tokenized)
+        
         # put the lemmatized sentence to the front
         list_of_sentences = [new_sentence] + list_of_sentences
         list_of_sentences.remove(a_sentence)
@@ -26,7 +34,7 @@ def p (word, sentence): # unigram probability
     for a_word in sentence.split():
         if word == a_word:
             count += 1
-    return count / len(sentence.split())
+    return count * 1.0 / len(sentence.split())
 
 def sentences_containing (word, sentences): #sentences = S + L + N?
     new_set = []
